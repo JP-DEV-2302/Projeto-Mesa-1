@@ -5,8 +5,8 @@ const char* WIFI_SSID = "SALA 09";
 const char* WIFI_SENHA = "info@134";
 const char* MQTT_BROKER = "adb9a2c2e8db40e785446b4911f449ed.s1.eu.hivemq.cloud";
 const int MQTT_PORTA = 8883;
-const char* MQTT_CLIENT_ID = "esp32_manuella_huertas";
-const char* MQTT_USUARIO = "huertasmanu_";
+const char* MQTT_CLIENT_ID = "esp32_joao_oliveira";
+const char* MQTT_USUARIO = "CA0S6";
 const char* MQTT_SENHA = "Senai@134";
 const bool MQTT_USAR_TLS = true;
 const char MQTT_CERTIFICADO_CA[] PROGMEM = R"EOF(
@@ -42,9 +42,9 @@ mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
 emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
-const char* TOPICOS_PUBLICAR[] = {"senai134/manuellaHuertas/esp32/status", "senai134/manuellaHuertas/esp32/log", "senai134/manuellaHuertas/esp32/resposta"};
+const char* TOPICOS_PUBLICAR[] = {"senai134/dev_01/esp32/status", "senai134/dev_01/esp32/log", "senai134/dev_01/esp32/resposta"};
 const int TOTAL_TOPICOS_PUBLICAR = 3;
-const char* TOPICOS_RECEBER[] = {"senai134/manuellaHuertas/esp32/comando", "senai134/manuellaHuertas/esp32/config", "senai134/manuellaHuertas/esp32/dislay"};
+const char* TOPICOS_RECEBER[] = {"senai134/dev_01/esp32/comando", "senai134/dev_01/esp32/config", "senai134/dev_01/esp32/dislay"};
 const int TOTAL_TOPICOS_RECEBER = 3;
 const bool USAR_AWS_IOT = false;
 const int DEBUG_NIVEL_INICIAL= 2;
