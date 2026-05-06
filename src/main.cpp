@@ -10,7 +10,7 @@
 const int PINO_LED_RGB = 48;
 const int QUANTIDADE_LEDS = 1;
 const int PINO_LAMPADA = 40;
-
+Led lampada(PINO_LAMPADA);
 const char TOPICO_COMANDO[] = "senai134/manuellaHuertas/esp32/comando";
 
 Adafruit_NeoPixel ledRGB(QUANTIDADE_LEDS, PINO_LED_RGB, NEO_GRB + NEO_KHZ800);
@@ -118,13 +118,11 @@ void tratarJsonLEDRGB(const String& mensagem)
       bool estadoLampada = doc["lampada"].as<bool>();
       if(estadoLampada)
       {
-        pinMode(PINO_LAMPADA, OUTPUT);
-        digitalWrite(PINO_LAMPADA, HIGH);
+        lampada.acender();
       }
       else
       {
-        pinMode(PINO_LAMPADA, OUTPUT);
-        digitalWrite(PINO_LAMPADA, LOW);
+        lampada.apagar();
       }
       debugInfo("Estado lampada:" + String(estadoLampada));
     }
