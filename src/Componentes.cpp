@@ -14,11 +14,7 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // ← mude para 0x3F se o display não liga
 // Inicializa todos os componentes físicos.
 // WiFi e MQTT são configurados no main.cpp — não repetir aqui.
 // -------------------------------------------------------
-void setupComponentes()
-{
-    pinMode(buzzer,     OUTPUT);
-    pinMode(ledQuarto,  OUTPUT);
-    pinMode(ledQuarto2, OUTPUT);
+
 
 void setupComponentes() {
   pinMode(buzzer,     OUTPUT);
