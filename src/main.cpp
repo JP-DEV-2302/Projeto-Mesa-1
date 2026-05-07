@@ -2,6 +2,8 @@
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
 #include <LED.h>
+#include <DHT.h>
+#include <DHT_U.h>
 
 
 #include "WiFiManager.h"
