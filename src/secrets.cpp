@@ -1,14 +1,19 @@
 #include "secrets.h"
 #include <Arduino.h>
 
-const char* WIFI_SSID = "SALA 09";
+// Credenciais da rede WiFi
+const char* WIFI_SSID  = "SALA 09";
 const char* WIFI_SENHA = "info@134";
-const char* MQTT_BROKER = "adb9a2c2e8db40e785446b4911f449ed.s1.eu.hivemq.cloud";
-const int MQTT_PORTA = 8883;
+
+// Configuração do broker MQTT (HiveMQ Cloud com TLS)
+const char* MQTT_BROKER    = "adb9a2c2e8db40e785446b4911f449ed.s1.eu.hivemq.cloud";
+const int   MQTT_PORTA     = 8883;
 const char* MQTT_CLIENT_ID = "Esp1Mesa1";
-const char* MQTT_USUARIO = "Coordenador";
-const char* MQTT_SENHA = "Senai@134";
-const bool MQTT_USAR_TLS = true;
+const char* MQTT_USUARIO   = "Coordenador";
+const char* MQTT_SENHA     = "Senai@134";
+const bool  MQTT_USAR_TLS  = true;
+
+// Certificado CA para validar a conexão TLS com o broker
 const char MQTT_CERTIFICADO_CA[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
@@ -42,10 +47,27 @@ mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
 emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
-const char* TOPICOS_PUBLICAR[] = {"senai134/dev_01/Coordenador/esp32/statusLampada", "senai134/dev_01/Coordenador/esp32/StatusSensorUmidade", "senai134/dev_01/Coordenador/esp32/statusSensorTemperatura"};
+// Tópicos que o ESP publica (envia comandos para os atuadores)
+const char* TOPICOS_PUBLICAR[] = {
+  "senai134/dev_01/Coordenador/esp32/comandoLampada",
+  "senai134/dev_01/Coordenador/esp32/comandoUmidade",
+  "senai134/dev_01/Coordenador/esp32/comandoTemperatura"
+};
 const int TOTAL_TOPICOS_PUBLICAR = 3;
-const char* TOPICOS_RECEBER[] = {"senai134/dev_01/Coordenador/esp32/statusLampada", "senai134/dev_01/Coordenador/esp32/StatusSensorUmidade", "senai134/dev_01/Coordenador/esp32/statusSensorTemperatura"};
+
+// Tópicos que o ESP assina (recebe status dos sensores/atuadores)
+const char* TOPICOS_RECEBER[] = {
+  "senai134/dev_01/Coordenador/esp32/statusLampada",
+  "senai134/dev_01/Coordenador/esp32/statusUmidade",
+  "senai134/dev_01/Coordenador/esp32/statusTemperatura"
+};
 const int TOTAL_TOPICOS_RECEBER = 3;
+
+// Integração com AWS IoT (desativada — usando HiveMQ)
 const bool USAR_AWS_IOT = false;
-const int DEBUG_NIVEL_INICIAL= 2;
+
+// Nível de log inicial (0 = nenhum, 1 = erros, 2 = info completo)
+const int DEBUG_NIVEL_INICIAL = 2;
+
+// Pino que, quando ativado, habilita debug completo em tempo de execução
 const int PINO_HABILITA_DEBUG_COMPLETO = 4;

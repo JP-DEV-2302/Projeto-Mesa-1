@@ -5,63 +5,63 @@
 #include "secrets.h"
 #include "DebugManager.h"
 
+// Retorna true se o WiFi estiver conectado
 bool wifiEstaConectado()
 {
     return WiFi.status() == WL_CONNECTED;
 }
 
+// -------------------------------------------------------
+// Conecta ao WiFi configurado em secrets.h.
+// Tenta por até 30 vezes (15 segundos) antes de desistir.
+// -------------------------------------------------------
 void conectarWiFi()
 {
-    debugInfo("===============================");
-    debugInfo("Iniciando conexão Wi-Fi...");
-    debugInfo("===============================");
-    /**Configura o ESP32 como station, ou seja,
-     * ele se conecta a um roteador Wi-Fi existente
-     */
+    debugInfo("Iniciando conexao Wi-Fi...");
+
+    // Modo station: conecta a um roteador existente
     WiFi.mode(WIFI_STA);
-
-    /**Inicia a conexão com SSID e senha */
     WiFi.begin(WIFI_SSID, WIFI_SENHA);
-    debugInfo("Conectando");
 
-    int tentativasWiFi = 0;
-    const int maxTentativasWiFi = 30;
-    /**Aguarda a conexão por até 30 tentativas */
-    while (WiFi.status() != WL_CONNECTED && tentativasWiFi < maxTentativasWiFi)
+    int tentativas = 0;
+    const int maxTentativas = 30;
+
+    while (WiFi.status() != WL_CONNECTED && tentativas < maxTentativas)
     {
         delay(500);
         debugInfoSemLinha(".");
-        tentativasWiFi++;
-    }
-    {
-        delay(500);
-        debugInfo(".");
+        tentativas++;
     }
 
     debugInfoSemLinha("\n\r");
 
     if (WiFi.status() == WL_CONNECTED)
     {
-        debugInfo("Conectado à rede Wi-Fi!");
-        debugInfoSemLinha("[INFO] Endereço IP: ");
+        debugInfo("Conectado ao Wi-Fi!");
+        debugInfoSemLinha("[INFO] IP: ");
         debugInfoSemLinha(WiFi.localIP().toString());
         debugInfoSemLinha("\n\r");
     }
     else
     {
-        debugErro("Falha ao conectar à rede Wi-Fi!");
-        debugErro("Verifique as credenciais e tente novamente.");
+        debugErro("Falha ao conectar ao Wi-Fi. Verifique as credenciais.");
     }
 }
+
+// -------------------------------------------------------
+// Garante que o WiFi está conectado, reconectando se necessário.
+// Deve ser chamado periodicamente no loop principal.
+// -------------------------------------------------------
 void garantirWiFiConectado()
 {
-    if (WiFi.status() != WL_CONNECTED)
+    if (!wifiEstaConectado())
     {
         debugErro("Wi-Fi desconectado. Tentando reconectar...");
         conectarWiFi();
     }
-    if (WiFi.status() != WL_CONNECTED)
+
+    if (!wifiEstaConectado())
     {
-        debugErro("Não foi possível reconectar ao Wi-Fi.");
+        debugErro("Nao foi possivel reconectar ao Wi-Fi.");
     }
 }

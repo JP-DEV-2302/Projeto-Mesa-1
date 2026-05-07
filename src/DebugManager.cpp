@@ -2,17 +2,20 @@
 #include "DebugManager.h"
 #include "secrets.h"
 
-int nivelDebugAtual = 2;
+// Nível de debug ativo (ajustado em configurarDebug())
+int nivelDebugAtual = DEBUG_NIVEL_INICIAL;
 
+// Imprime mensagem de erro com prefixo [ERRO]
 void debugErro(const String& mensagem)
 {
     if(nivelDebugAtual >= DEBUG_ERRO)
     {
-        Serial.print("[ERRO]");
+        Serial.print("[ERRO] ");
         Serial.println(mensagem);
     }
 }
 
+// Imprime mensagem de erro sem quebra de linha
 void debugErroSemLinha(const String& mensagem)
 {
     if(nivelDebugAtual >= DEBUG_ERRO)
@@ -21,15 +24,17 @@ void debugErroSemLinha(const String& mensagem)
     }
 }
 
+// Imprime mensagem informativa com prefixo [INFO]
 void debugInfo(const String& mensagem)
 {
     if(nivelDebugAtual >= DEBUG_TUDO)
     {
-        Serial.print("[INFO]");
+        Serial.print("[INFO] ");
         Serial.println(mensagem);
     }
 }
 
+// Imprime mensagem informativa sem quebra de linha
 void debugInfoSemLinha(const String& mensagem)
 {
     if(nivelDebugAtual >= DEBUG_TUDO)
@@ -38,34 +43,22 @@ void debugInfoSemLinha(const String& mensagem)
     }
 }
 
+// -------------------------------------------------------
+// Inicializa o sistema de debug.
+// Se o pino PINO_HABILITA_DEBUG_COMPLETO estiver em LOW,
+// força o nível máximo independente do secrets.h.
+// -------------------------------------------------------
 void configurarDebug()
 {
     Serial.begin(9600);
     delay(500);
-    pinMode(PINO_HABILITA_DEBUG_COMPLETO, INPUT_PULLUP);
-    if(digitalRead(PINO_HABILITA_DEBUG_COMPLETO) == LOW)
-    {
-        nivelDebugAtual = DEBUG_TUDO;
-    }
-    else
-    {
-        nivelDebugAtual = DEBUG_NIVEL_INICIAL;
-    }
 
-    for(int i = 0; i < 5; i++)
-    {
-        debugInfoSemLinha("");
-    }
-    debugInfo("==================================");
-    debugInfo("          ESP32 Iniciado          ");
-    debugInfo("      Sistema de debug ativo      ");
-    if(nivelDebugAtual == DEBUG_ERRO)
-    {
-        debugInfo("Debug iniciado em modo apenas erro");
-    }
-    else
-    {
-        debugInfo("Debug iniciado em modo completo");
-    }
-    debugInfo("==================================");
+    // Pino físico para forçar debug completo em tempo de execução
+    pinMode(PINO_HABILITA_DEBUG_COMPLETO, INPUT_PULLUP);
+    nivelDebugAtual = (digitalRead(PINO_HABILITA_DEBUG_COMPLETO) == LOW)
+        ? DEBUG_TUDO
+        : DEBUG_NIVEL_INICIAL;
+
+    debugInfo("ESP32 iniciado.");
+    debugInfo("Modo de debug: " + String(nivelDebugAtual == DEBUG_ERRO ? "apenas erros" : "completo"));
 }

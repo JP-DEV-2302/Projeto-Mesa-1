@@ -1,90 +1,104 @@
 #include "Componentes.h"
 
-// --- Tópicos MQTT de temperatura e umidade ---
-const char* topic_temp = "senai134/dev_01/esp32/temperatura"; // ← ajuste
-const char* topic_umid = "senai134/dev_01/esp32/umidade";     // ← ajuste
+// Tópicos MQTT seguindo o padrão do projeto (definido em secrets.h)
+const char* topic_temp = "senai134/dev_01/Coordenador/esp32/comandoTemperatura";
+const char* topic_umid = "senai134/dev_01/Coordenador/esp32/comandoUmidade";
 
-// --- Variáveis de hardware ---
-int              buzzer     = BUZZER_PIN;
-int              ledQuarto  = LED_QUARTO_PIN;
-int              ledQuarto2 = LED_QUARTO2_PIN;
-DHT              dht(DHTPIN, DHTTYPE);
-LiquidCrystal_I2C lcd(0x27, 16, 2); // ← mude para 0x3F se o display não ligar
+// Pinos dos componentes (definidos em Componentes.h)
+int buzzer     = BUZZER_PIN;
+int ledQuarto  = LED_QUARTO_PIN;
+int ledQuarto2 = LED_QUARTO2_PIN;
+
+// Instâncias do sensor DHT e display LCD
+DHT dht(DHTPIN, DHTTYPE);
+LiquidCrystal_I2C lcd(0x27, 16, 2); // Use 0x3F se o display não ligar
 
 // -------------------------------------------------------
+// Inicializa todos os componentes físicos.
+// WiFi e MQTT são configurados no main.cpp — não repetir aqui.
+// -------------------------------------------------------
+void setupComponentes()
+{
+    pinMode(buzzer,     OUTPUT);
+    pinMode(ledQuarto,  OUTPUT);
+    pinMode(ledQuarto2, OUTPUT);
 
-void setupComponentes() {
-  pinMode(buzzer,     OUTPUT);
-  pinMode(ledQuarto,  OUTPUT);
-  pinMode(ledQuarto2, OUTPUT);
+    dht.begin();
+    lcd.init();
+    lcd.backlight();
 
-  dht.begin();
-  lcd.init();
-  lcd.backlight();
-
-  // WiFi e MQTT já são configurados no main.cpp (conectarWiFi / configurarMQTT)
-  // Não chame novamente aqui para evitar reconexão dupla
-
-  debugInfo("Calibrando os sensores");
-  for (int i = 0; i < 5; i++) {
-    delay(1500);
-    debugInfoSemLinha(".");
-  }
-  delay(1500);
-  debugInfoSemLinha("\n\r");
-  debugInfo("Sensores calibrados!!!");
-  debugInfo("  *TESTE LIBERADO*");
+    // Aguarda estabilização do sensor DHT
+    debugInfo("Calibrando sensores...");
+    for (int i = 0; i < 5; i++)
+    {
+        delay(1500);
+        debugInfoSemLinha(".");
+    }
+    debugInfoSemLinha("\n\r");
+    debugInfo("Sensores calibrados. Sistema pronto.");
 }
 
 // -------------------------------------------------------
-
-void alarme_dois_tons() {
-  const int freqAlta   = 2000;
-  const int freqBaixa  = 800;
-  const int duracaoTom = 300;
-
-  for (int i = 0; i < 2; i++) {
-    tone(buzzer, freqAlta,  duracaoTom);
-    tone(buzzer, freqBaixa, duracaoTom);
-    delay(500);
-    tone(buzzer, freqAlta,  duracaoTom);
-    tone(buzzer, freqBaixa, duracaoTom);
-  }
-  noTone(buzzer);
-}
-
+// Emite alarme sonoro de dois tons alternados (2 ciclos).
+// Cada tom toca pelo tempo de duracaoTom antes do próximo.
 // -------------------------------------------------------
+void alarme_dois_tons()
+{
+    const int freqAlta   = 2000;
+    const int freqBaixa  = 800;
+    const int duracaoTom = 300;
 
-void verificarTemperaturaEUmidade() {
-  float temperatura = dht.readTemperature();
-  float umidade     = dht.readHumidity();
-
-  if (isnan(temperatura) || isnan(umidade)) {
-    debugErro("Erro ao ler DHT!");
-    return;
-  }
-
-  debugInfo("Temp: " + String(temperatura, 1) + " C | Umid: " + String(umidade, 1) + " %");
-
-  char tempStr[10], umidStr[10];
-  dtostrf(temperatura, 4, 1, tempStr);
-  dtostrf(umidade,     4, 1, umidStr);
-
-  // ⚠️ Se MqttManager expõe uma função de publish (ex: publicarMensagem()),
-  // prefira usá-la no lugar de client.publish() direto.
-  publicarMensagem(topic_temp, tempStr); // ← verifique o nome em MqttManager.h
-  publicarMensagem(topic_umid, umidStr);
-
-  if (temperatura <= 21.00 || temperatura >= 25.00) {
-    alarme_dois_tons();
-  } else {
+    for (int i = 0; i < 2; i++)
+    {
+        tone(buzzer, freqAlta);
+        delay(duracaoTom);
+        tone(buzzer, freqBaixa);
+        delay(duracaoTom);
+        delay(500);
+        tone(buzzer, freqAlta);
+        delay(duracaoTom);
+        tone(buzzer, freqBaixa);
+        delay(duracaoTom);
+    }
     noTone(buzzer);
-  }
+}
 
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Umidade: " + String(umidade, 1) + "%");
-  lcd.setCursor(0, 1);
-  lcd.print("Temp: " + String(temperatura, 1) + "C");
-  delay(2000);
+// -------------------------------------------------------
+// Lê temperatura e umidade do DHT, publica via MQTT,
+// aciona alarme se fora do intervalo (21°C–25°C)
+// e exibe os valores no display LCD.
+// -------------------------------------------------------
+void verificarTemperaturaEUmidade()
+{
+    float temperatura = dht.readTemperature();
+    float umidade     = dht.readHumidity();
+
+    if (isnan(temperatura) || isnan(umidade))
+    {
+        debugErro("Falha na leitura do sensor DHT.");
+        return;
+    }
+
+    debugInfo("Temp: " + String(temperatura, 1) + "C | Umid: " + String(umidade, 1) + "%");
+
+    // Converte para string e publica nos tópicos MQTT
+    char tempStr[10], umidStr[10];
+    dtostrf(temperatura, 4, 1, tempStr);
+    dtostrf(umidade,     4, 1, umidStr);
+    publicarMensagem(topic_temp, tempStr);
+    publicarMensagem(topic_umid, umidStr);
+
+    // Aciona alarme se temperatura fora do intervalo seguro
+    if (temperatura <= 21.00 || temperatura >= 25.00)
+        alarme_dois_tons();
+    else
+        noTone(buzzer);
+
+    // Exibe leituras no display LCD
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Umidade: " + String(umidade, 1) + "%");
+    lcd.setCursor(0, 1);
+    lcd.print("Temp: " + String(temperatura, 1) + "C");
+    delay(2000);
 }
