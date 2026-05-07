@@ -1,19 +1,24 @@
 #include "secrets.h"
 #include <Arduino.h>
 
-const char* WIFI_SSID = "SALA 09";
-const char* WIFI_SENHA = "info@134";
+const char* WIFI_SSID   = "SALA 09";
+const char* WIFI_SENHA  = "info@134";
 const char* MQTT_BROKER = "adb9a2c2e8db40e785446b4911f449ed.s1.eu.hivemq.cloud";
-const int MQTT_PORTA = 8883;
+const int   MQTT_PORTA  = 8883;
+
 const char* MQTT_CLIENT_ID = "esp32_joao_oliveira";
-const char* MQTT_USUARIO = "CA0S6";
-const char* MQTT_SENHA = "Senai@134";
-// const char* MQTT_USUARIO = "huertasmanu_";
-// const char* MQTT_SENHA = "Senai@134";
-// const char* MQTT_USUARIO = "NeytonDuarte";
-// const char* MQTT_SENHA = "Senai@134";
-// const char* MQTT_USUARIO = "Eric T";
-// const char* MQTT_SENHA = "Senai@134";
+const char* MQTT_USUARIO   = "CA0S6";
+const char* MQTT_SENHA     = "Senai@134";
+// const char* MQTT_CLIENT_ID = "esp32_manu";
+// const char* MQTT_USUARIO   = "huertasmanu_";
+// const char* MQTT_SENHA     = "Senai@134";
+// const char* MQTT_CLIENT_ID = "esp32_neyton";
+// const char* MQTT_USUARIO   = "NeytonDuarte";
+// const char* MQTT_SENHA     = "Senai@134";
+// const char* MQTT_CLIENT_ID = "esp32_eric";
+// const char* MQTT_USUARIO   = "Eric T";
+// const char* MQTT_SENHA     = "Senai@134";
+
 const bool MQTT_USAR_TLS = true;
 const char MQTT_CERTIFICADO_CA[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
@@ -48,10 +53,23 @@ mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
 emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
-const char* TOPICOS_PUBLICAR[] = {"senai134/dev_01/esp32/status", "senai134/dev_01/esp32/log", "senai134/dev_01/esp32/resposta"};
-const int TOTAL_TOPICOS_PUBLICAR = 3;
-const char* TOPICOS_RECEBER[] = {"senai134/dev_01/esp32/comando", "senai134/dev_01/esp32/config", "senai134/dev_01/esp32/dislay"};
+
+const char* TOPICOS_PUBLICAR[] = {
+  "senai134/dev_01/esp32/status",       // TOPICO_IDX_STATUS      (0)
+  "senai134/dev_01/esp32/log",           // TOPICO_IDX_LOG         (1)
+  "senai134/dev_01/esp32/resposta",      // TOPICO_IDX_RESPOSTA    (2)
+  "senai134/dev_01/esp32/temperatura",   // TOPICO_IDX_TEMPERATURA (3)
+  "senai134/dev_01/esp32/umidade"        // TOPICO_IDX_UMIDADE     (4)
+};
+const int TOTAL_TOPICOS_PUBLICAR = 5;
+
+const char* TOPICOS_RECEBER[] = {
+  "senai134/dev_01/esp32/comando",
+  "senai134/dev_01/esp32/config",
+  "senai134/dev_01/esp32/dislay"
+};
 const int TOTAL_TOPICOS_RECEBER = 3;
-const bool USAR_AWS_IOT = false;
-const int DEBUG_NIVEL_INICIAL= 2;
-const int PINO_HABILITA_DEBUG_COMPLETO = 4;
+
+const bool USAR_AWS_IOT              = false;
+const int  DEBUG_NIVEL_INICIAL       = 2;
+const int  PINO_HABILITA_DEBUG_COMPLETO = 4;
