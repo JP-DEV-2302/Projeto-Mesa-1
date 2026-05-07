@@ -8,6 +8,12 @@ const int MQTT_PORTA = 8883;
 const char* MQTT_CLIENT_ID = "esp32_joao_oliveira";
 const char* MQTT_USUARIO = "CA0S6";
 const char* MQTT_SENHA = "Senai@134";
+const char* MQTT_USUARIO = "huertasmanu_";
+const char* MQTT_SENHA = "Senai@134";
+const char* MQTT_USUARIO = "NeytonDuarte";
+const char* MQTT_SENHA = "Senai@134";
+const char* MQTT_USUARIO = "Eric T";
+const char* MQTT_SENHA = "Senai@134";
 const bool MQTT_USAR_TLS = true;
 const char MQTT_CERTIFICADO_CA[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
