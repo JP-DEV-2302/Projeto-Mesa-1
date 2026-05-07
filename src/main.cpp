@@ -3,6 +3,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <LED.h>
 
+
 #include "WiFiManager.h"
 #include "MqttManager.h"
 #include "DebugManager.h"
@@ -118,15 +119,23 @@ void tratarJsonLEDRGB(const String& mensagem)
   // ---------------- LAMPADA (CORRIGIDO) ----------------
   if(doc["lampada"].is<bool>())
   {
-    bool estadoLampada = doc["lampada"].as<bool>();
-
-    lampada.acender();
-    
-
-    debugInfo("Estado lampada: " + String(estadoLampada));
-  }
-  else if(doc.containsKey("lampada"))
-  {
-    debugErro("JSON INVALIDO. Use lampada: true ou false");
+    if(!doc["lampada"].is<bool>())
+    {
+      debugInfo("JSON INVALIDADO. Use lampada: true ou lampada: false");
+      return;
+    }
+    else
+    {
+      bool estadoLampada = doc["lampada"].as<bool>();
+      if(estadoLampada)
+      {
+        lampada.acender();
+      }
+      else
+      {
+        lampada.apagar();
+      }
+      debugInfo("Estado lampada:" + String(estadoLampada));
+    }
   }
 }
