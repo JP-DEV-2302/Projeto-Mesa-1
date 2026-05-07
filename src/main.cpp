@@ -14,7 +14,7 @@ const int PINO_LED_RGB = 48;
 const int QUANTIDADE_LEDS = 1;
 const int PINO_LAMPADA = 40;
 Led lampada(PINO_LAMPADA);
-const char TOPICO_COMANDO[] = "senai134/manuellaHuertas/esp32/comando";
+const char TOPICO_COMANDO[] = "senai134/dev_01/Coordenador/esp32/statusLampada";
 
 Adafruit_NeoPixel ledRGB(QUANTIDADE_LEDS, PINO_LED_RGB, NEO_GRB + NEO_KHZ800);
 
