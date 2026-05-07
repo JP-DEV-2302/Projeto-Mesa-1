@@ -42,9 +42,9 @@ mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
 emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
-const char* TOPICOS_PUBLICAR[] = {"senai134/manuellaHuertas/esp32/status", "senai134/manuellaHuertas/esp32/log", "senai134/manuellaHuertas/esp32/resposta"};
+const char* TOPICOS_PUBLICAR[] = {"senai134/manuellaHuertas/esp32/statusSensorUmidade", "senai134/manuellaHuertas/esp32/statusSensorTemperatura", "senai134/manuellaHuertas/esp32/statusLampada", "senai134/manuellaHuertas/esp32/statusLEDRGB", "senai134/manuellaHuertas/esp32/statusBuzzer"};
 const int TOTAL_TOPICOS_PUBLICAR = 3;
-const char* TOPICOS_RECEBER[] = {"senai134/manuellaHuertas/esp32/comando", "senai134/manuellaHuertas/esp32/config", "senai134/manuellaHuertas/esp32/dislay"};
+const char* TOPICOS_RECEBER[] = {"senai134/manuellaHuertas/esp32/statusSensorUmidade", "senai134/manuellaHuertas/esp32/statusSensorTemperatura", "senai134/manuellaHuertas/esp32/statusLampada", "senai134/manuellaHuertas/esp32/statusLEDRGB", "senai134/manuellaHuertas/esp32/statusBuzzer"};
 const int TOTAL_TOPICOS_RECEBER = 3;
 const bool USAR_AWS_IOT = false;
 const int DEBUG_NIVEL_INICIAL= 2;
