@@ -1,13 +1,12 @@
 #include "Componentes.h"
 
 // --- Tópicos MQTT de temperatura e umidade ---
-const char* topic_temp = "senai134/dev_01/esp32/temperatura"; // ← ajuste
-const char* topic_umid = "senai134/dev_01/esp32/umidade";     // ← ajuste
+const char* topic_umid = "senai134/dev_01/Coordenador/esp32/StatusSensorUmidade"; // ← ajuste
+const char* topic_temp = "senai134/dev_01/Coordenador/esp32/statusSensorTemperatura";     // ← ajuste
 
 // --- Variáveis de hardware ---
 int              buzzer     = BUZZER_PIN;
-int              ledQuarto  = LED_QUARTO_PIN;
-int              ledQuarto2 = LED_QUARTO2_PIN;
+
 DHT              dht(DHTPIN, DHTTYPE);
 LiquidCrystal_I2C lcd(0x27, 16, 2); // ← mude para 0x3F se o display não ligar
 
@@ -15,15 +14,13 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // ← mude para 0x3F se o display não liga
 
 void setupComponentes() {
   pinMode(buzzer,     OUTPUT);
-  pinMode(ledQuarto,  OUTPUT);
-  pinMode(ledQuarto2, OUTPUT);
+ 
 
   dht.begin();
   lcd.init();
   lcd.backlight();
 
-  // WiFi e MQTT já são configurados no main.cpp (conectarWiFi / configurarMQTT)
-  // Não chame novamente aqui para evitar reconexão dupla
+ 
 
   debugInfo("Calibrando os sensores");
   for (int i = 0; i < 5; i++) {
