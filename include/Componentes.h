@@ -10,11 +10,11 @@
 // Pinos dos componentes — ajuste conforme o hardware utilizado
 #define DHTPIN      10
 #define DHTTYPE     DHT22
-#define BUZZER_PIN  8
+#define BUZZER_PIN  7
 
 // Faixas seguras para sala de arquivos (ABNT NBR 9077 / ISO 11799)
-#define TEMP_MIN    21.0f
-#define TEMP_MAX    27.0f
+#define TEMP_MIN    20.0f
+#define TEMP_MAX    30.0f
 #define UMID_MIN    45.0f
 #define UMID_MAX    60.0f
 

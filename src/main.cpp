@@ -16,10 +16,12 @@ const int QUANTIDADE_LEDS = 1;
 
 // Configuração da lâmpada
 const int PINO_LAMPADA = 40;
-Led lampada(PINO_LAMPADA);
+Led lampada;
 
 // Tópico MQTT que a aplicação escuta
-const char TOPICO_COMANDO[] = "senai134/dev_01/Coordenador/esp32/statusLampada";
+const char TOPICO_COMANDO[] =   "senai134/dev_01/Coordenador/esp32/comandoLampada";
+                                   // "1" = alerta | "0" = normal
+
 
 
 Adafruit_NeoPixel ledRGB(QUANTIDADE_LEDS, PINO_LED_RGB, NEO_GRB + NEO_KHZ800);
