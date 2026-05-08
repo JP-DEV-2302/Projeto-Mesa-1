@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
-#include <LED.h>
+//#include <LED.h>
 #include <DHT.h>
 #include <DHT_U.h>
 
@@ -16,7 +16,7 @@ const int QUANTIDADE_LEDS = 1;
 
 // Configuração da lâmpada
 const int PINO_LAMPADA = 40;
-Led lampada;
+
 
 // Tópico MQTT que a aplicação escuta
 const char TOPICO_COMANDO[] =   "senai134/dev_01/Coordenador/esp32/comandoLampada";
@@ -38,6 +38,7 @@ void tratarJsonLEDRGB(const String& mensagem);
 void setup()
 {
   Serial.begin(9600);
+  pinMode(PINO_LAMPADA, OUTPUT);
   configurarDebug();
   conectarWiFi();
   configurarMQTT();
@@ -52,10 +53,22 @@ void setup()
 // -------------------------------------------------------
 void loop()
 {
-  garantirWiFiConectado();
-  garantirMQTTConectado();
-  loopMQTT();
-  verificarTemperaturaEUmidade();
+    garantirWiFiConectado();
+    garantirMQTTConectado();
+
+    loopMQTT();
+
+    // 🔥 separa completamente tarefas críticas
+    static unsigned long lastSensor = 0;
+
+    if (millis() - lastSensor > 3000)
+    {
+        lastSensor = millis();
+        verificarTemperaturaEUmidade();
+    }
+
+    delay(10);
+    yield();
 }
 
 // -------------------------------------------------------
@@ -142,11 +155,12 @@ void tratarJsonLEDRGB(const String& mensagem)
     );
   }
 
-  // Liga ou desliga a lâmpada, se presente no JSON
-  if (doc["lampada"].is<bool>())
-  {
+ if (doc["lampada"].is<bool>())
+{
     bool estado = doc["lampada"].as<bool>();
-    estado ? lampada.acender() : lampada.apagar();
+
+    digitalWrite(PINO_LAMPADA, estado ? HIGH : LOW);
+
     debugInfo("Lampada: " + String(estado ? "ligada" : "desligada"));
-  }
+}
 }
