@@ -10,7 +10,7 @@
 #include "DebugManager.h"
 #include "Componentes.h"
 
-// Configuração do LED RGB (NeoPixel)
+// Configuração do LED RGB (NeoPixel).
 const int PINO_LED_RGB    = 48;
 const int QUANTIDADE_LEDS = 1;
 

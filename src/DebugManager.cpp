@@ -2,7 +2,7 @@
 #include "DebugManager.h"
 #include "secrets.h"
 
-// Nível de debug ativo (ajustado em configurarDebug())
+// Nível de debug ativo (ajustado em configurarDebug()).
 int nivelDebugAtual = DEBUG_NIVEL_INICIAL;
 
 // Imprime mensagem de erro com prefixo [ERRO]

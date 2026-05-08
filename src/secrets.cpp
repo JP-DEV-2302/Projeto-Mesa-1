@@ -47,19 +47,25 @@ mRGunUHBcnWEvgJBQl9nJEiU0Zsnvgc/ubhPgXRR4Xq37Z0j4r7g1SgEEzwxA57d
 emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
-// Tópicos que o ESP publica (envia comandos para os atuadores)
+
+// -------------------------------------------------------
+// Tópicos que o ESP publica
+// Índices usados em Componentes.h via INDICE_TOPICO_*
+// [0] lampada | [1] umidade | [2] temperatura | [3] alarme
+// -------------------------------------------------------
 const char* TOPICOS_PUBLICAR[] = {
-  "senai134/dev_01/Coordenador/esp32/comandoLampada",
-  "senai134/dev_01/Coordenador/esp32/comandoUmidade",
-  "senai134/dev_01/Coordenador/esp32/comandoTemperatura"
+    "senai134/dev_01/Coordenador/esp32/comandoLampada",
+    "senai134/dev_01/Coordenador/esp32/comandoUmidade",
+    "senai134/dev_01/Coordenador/esp32/comandoTemperatura",
+    "senai134/dev_01/Coordenador/esp32/statusAlarme"      // "1" = alerta | "0" = normal
 };
-const int TOTAL_TOPICOS_PUBLICAR = 3;
+const int TOTAL_TOPICOS_PUBLICAR = 4; // ← atualizado de 3 para 4
 
 // Tópicos que o ESP assina (recebe status dos sensores/atuadores)
 const char* TOPICOS_RECEBER[] = {
-  "senai134/dev_01/Coordenador/esp32/statusLampada",
-  "senai134/dev_01/Coordenador/esp32/statusUmidade",
-  "senai134/dev_01/Coordenador/esp32/statusTemperatura"
+    "senai134/dev_01/Coordenador/esp32/statusLampada",
+    "senai134/dev_01/Coordenador/esp32/statusUmidade",
+    "senai134/dev_01/Coordenador/esp32/statusTemperatura"
 };
 const int TOTAL_TOPICOS_RECEBER = 3;
 
@@ -69,5 +75,5 @@ const bool USAR_AWS_IOT = false;
 // Nível de log inicial (0 = nenhum, 1 = erros, 2 = info completo)
 const int DEBUG_NIVEL_INICIAL = 2;
 
-// Pino que, quando ativado, habilita debug completo em tempo de execução
+// Pino que, quando em LOW, habilita debug completo em tempo de execução
 const int PINO_HABILITA_DEBUG_COMPLETO = 4;

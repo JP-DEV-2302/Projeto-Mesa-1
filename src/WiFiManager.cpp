@@ -5,7 +5,7 @@
 #include "secrets.h"
 #include "DebugManager.h"
 
-// Retorna true se o WiFi estiver conectado
+// Retorna true se o WiFi estiver conectado 
 bool wifiEstaConectado()
 {
     return WiFi.status() == WL_CONNECTED;

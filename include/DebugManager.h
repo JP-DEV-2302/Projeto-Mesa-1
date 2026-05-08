@@ -2,7 +2,7 @@
 #define DEBUG_MANAGER_H
 #include <Arduino.h>
 
-// Níveis de debug (do mais silencioso ao mais verboso)
+// Níveis de debug (do mais silencioso ao mais verboso).
 #define DEBUG_NENHUM 0  // Nenhuma saída serial
 #define DEBUG_ERRO   1  // Apenas erros
 #define DEBUG_TUDO   2  // Erros e informações

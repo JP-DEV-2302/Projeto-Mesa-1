@@ -7,7 +7,7 @@
 #include "secrets.h"
 #include "DebugManager.h"
 
-// Clientes de rede: um sem TLS e outro com TLS (conexão segura)
+// Clientes de rede: um sem TLS e outro com TLS (conexão segura e constante)
 WiFiClient wifiCliente;
 WiFiClientSecure wifiClientSecure;
 

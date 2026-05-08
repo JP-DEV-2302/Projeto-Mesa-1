@@ -5,35 +5,37 @@
 #include <DHT.h>
 #include <LiquidCrystal_I2C.h>
 #include "DebugManager.h"
-#include "WiFiManager.h"
 #include "MqttManager.h"
-#include "secrets.h"
 
 // Pinos dos componentes — ajuste conforme o hardware utilizado
-#define DHTPIN          13
-#define DHTTYPE         DHT22
-#define BUZZER_PIN      12
-#define LED_QUARTO_PIN  26
-#define LED_QUARTO2_PIN 27
+#define DHTPIN      10
+#define DHTTYPE     DHT22
+#define BUZZER_PIN  8
 
-// Tópicos MQTT de publicação de temperatura e umidade
-extern const char* topic_temp;
-extern const char* topic_umid;
+// Faixas seguras para sala de arquivos (ABNT NBR 9077 / ISO 11799)
+#define TEMP_MIN    21.0f
+#define TEMP_MAX    27.0f
+#define UMID_MIN    45.0f
+#define UMID_MAX    60.0f
 
-// Instâncias e pinos dos componentes físicos
-extern int            buzzer;
-extern int            ledQuarto;
-extern int            ledQuarto2;
-extern DHT            dht;
+// Índices dos tópicos de publicação definidos em secrets.cpp
+// [0] = comandoLampada | [1] = comandoUmidade | [2] = comandoTemperatura | [3] = statusAlarme
+#define INDICE_TOPICO_TEMPERATURA 2
+#define INDICE_TOPICO_UMIDADE     1
+#define INDICE_TOPICO_ALARME      3
+
+// Número máximo de falhas consecutivas do DHT antes de logar repetidamente
+#define MAX_FALHAS_DHT 5
+
+// Instâncias dos componentes físicos (definidas em Componentes.cpp)
+extern int              buzzer;
+extern DHT              dht;
 extern LiquidCrystal_I2C lcd;
 
 // Inicializa todos os componentes (chamar no setup())
 void setupComponentes();
 
-// Emite alarme sonoro de dois tons alternados
-void alarme_dois_tons();
-
-// Lê DHT, publica via MQTT e atualiza o LCD (chamar no loop())
+// Lê DHT, publica via MQTT e atualiza o LCD — não-bloqueante (chamar no loop())
 void verificarTemperaturaEUmidade();
 
 #endif

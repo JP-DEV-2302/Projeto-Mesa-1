@@ -2,7 +2,7 @@
 #define MQTT_MANAGER_H
 #include <Arduino.h>
 
-// Tipo do callback chamado ao receber uma mensagem MQTT
+// Tipo do callback chamado ao receber uma mensagem MQTT.
 typedef void (*CallbackMensagemMQTT)(const char* topico, const String& mensagem);
 
 // Configuração e conexão

@@ -1,7 +1,7 @@
 #ifndef SECRETS_H
 #define SECRETS_H
 
-// Credenciais WiFi
+// Credenciais WiFi.
 extern const char* WIFI_SSID;
 extern const char* WIFI_SENHA;
 

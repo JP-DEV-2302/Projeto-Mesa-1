@@ -7,7 +7,7 @@ bool wifiEstaConectado();
 // Conecta ao WiFi usando as credenciais definidas em secrets.h
 void conectarWiFi();
 
-// Reconecta ao WiFi se a conexão tiver caído. Chamar no loop().
+// Reconecta ao WiFi se a conexão tiver caído. Chamar no loop()
 void garantirWiFiConectado();
 
 #endif
