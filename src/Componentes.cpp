@@ -105,27 +105,32 @@ void setupComponentes()
 // -------------------------------------------------------
 static void atualizarAlarme()
 {
-    // Se o alarme não está ativo, silencia o buzzer e retorna
+    // Rastreia se o buzzer já foi silenciado para evitar
+    // chamadas repetidas a noTone() a cada iteração do loop
+    static bool buzzerJaSilenciado = true;
+
     if (!alarmeAtivo)
     {
-        noTone(buzzer);
+        if (!buzzerJaSilenciado)
+        {
+            noTone(buzzer);
+            buzzerJaSilenciado = true;
+        }
         return;
     }
 
-    unsigned long agora = millis();
+    // Alarme ativo: marca que o buzzer está em uso
+    buzzerJaSilenciado = false;
 
-    // Verifica se já passou o tempo suficiente para trocar o tom
+    unsigned long agora = millis();
     if (agora - alarmeUltimoMs < DURACAO_TOM_MS) return;
 
-    // Atualiza a marca de tempo e alterna entre etapa 0 e 1
     alarmeUltimoMs = agora;
     alarmeEtapa    = (alarmeEtapa + 1) % 2;
 
-    // Toca o tom correspondente à etapa atual
     int frequencia = (alarmeEtapa == 0) ? FREQ_ALTA : FREQ_BAIXA;
     tone(buzzer, frequencia);
 }
-
 // -------------------------------------------------------
 // Leitura periódica do DHT22, publicação MQTT e
 // atualização do LCD. Gerencia alarme por faixa segura.
@@ -195,7 +200,10 @@ void verificarTemperaturaEUmidade()
         }
         else
         {
+        
+            
             debugErro("Nenhum valor valido anterior disponivel para exibir no LCD.");
+            
         }
 
         return; // Interrompe o ciclo — não publica dados inválidos

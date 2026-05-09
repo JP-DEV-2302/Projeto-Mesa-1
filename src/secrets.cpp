@@ -18,8 +18,8 @@
 // -------------------------------------------------------
 // Credenciais da rede WiFi
 // -------------------------------------------------------
-const char* WIFI_SSID  = "SALA 09";    // Nome da rede (SSID)
-const char* WIFI_SENHA = "info@134";   // Senha da rede
+const char* WIFI_SSID  = "CRISTINA";    // Nome da rede (SSID)
+const char* WIFI_SENHA = "cristina";   // Senha da rede
 
 // -------------------------------------------------------
 // Configuração do broker MQTT
