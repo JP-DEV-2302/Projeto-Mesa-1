@@ -1,19 +1,42 @@
+/*
+ * ============================================================
+ * secrets.cpp
+ * ------------------------------------------------------------
+ * Define todas as credenciais, configurações de rede,
+ * tópicos MQTT e parâmetros de comportamento do sistema.
+ *
+ * ATENÇÃO: Este arquivo contém dados sensíveis.
+ * Adicione-o ao .gitignore para não versionar credenciais.
+ *
+ * As declarações (extern) estão em secrets.h.
+ * ============================================================
+ */
+
 #include "secrets.h"
 #include <Arduino.h>
 
+// -------------------------------------------------------
 // Credenciais da rede WiFi
-const char* WIFI_SSID  = "SALA 09";
-const char* WIFI_SENHA = "info@134";
+// -------------------------------------------------------
+const char* WIFI_SSID  = "SALA 09";    // Nome da rede (SSID)
+const char* WIFI_SENHA = "info@134";   // Senha da rede
 
-// Configuração do broker MQTT (HiveMQ Cloud com TLS)
+// -------------------------------------------------------
+// Configuração do broker MQTT
+// Usando HiveMQ Cloud com conexão TLS (porta 8883)
+// -------------------------------------------------------
 const char* MQTT_BROKER    = "adb9a2c2e8db40e785446b4911f449ed.s1.eu.hivemq.cloud";
-const int   MQTT_PORTA     = 8883;
-const char* MQTT_CLIENT_ID = "Esp1Mesa1";
-const char* MQTT_USUARIO   = "Coordenador";
-const char* MQTT_SENHA     = "Senai@134";
-const bool  MQTT_USAR_TLS  = true;
+const int   MQTT_PORTA     = 8883;          // 8883 = TLS | 1883 = sem TLS
+const char* MQTT_CLIENT_ID = "Esp1Mesa1";  // ID único do ESP no broker
+const char* MQTT_USUARIO   = "Coordenador";// Usuário de autenticação
+const char* MQTT_SENHA     = "Senai@134";  // Senha de autenticação
+const bool  MQTT_USAR_TLS  = true;         // Habilita conexão segura TLS
 
-// Certificado CA para validar a conexão TLS com o broker
+// -------------------------------------------------------
+// Certificado CA (ISRG Root X1 — Let's Encrypt)
+// Usado para validar a identidade do broker HiveMQ Cloud.
+// Armazenado em PROGMEM para economizar RAM no ESP32.
+// -------------------------------------------------------
 const char MQTT_CERTIFICADO_CA[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
 MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw
@@ -49,31 +72,41 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 )EOF";
 
 // -------------------------------------------------------
-// Tópicos que o ESP publica
-// Índices usados em Componentes.h via INDICE_TOPICO_*
-// [0] lampada | [1] umidade | [2] temperatura | [3] alarme
+// Tópicos MQTT de PUBLICAÇÃO (ESP → broker)
+// O ESP envia dados nesses tópicos.
+// Os índices correspondem aos defines em Componentes.h:
+//   [0] INDICE_TOPICO_LAMPADA      → comandoLampada
+//   [1] INDICE_TOPICO_UMIDADE      → comandoUmidade
+//   [2] INDICE_TOPICO_TEMPERATURA  → comandoTemperatura
+//   [3] INDICE_TOPICO_ALARME       → statusAlarme ("1"=alerta, "0"=normal)
 // -------------------------------------------------------
 const char* TOPICOS_PUBLICAR[] = {
     "senai134/dev_01/Coordenador/esp32/comandoLampada",
     "senai134/dev_01/Coordenador/esp32/comandoUmidade",
     "senai134/dev_01/Coordenador/esp32/comandoTemperatura",
-    "senai134/dev_01/Coordenador/esp32/statusAlarme"      // "1" = alerta | "0" = normal
+    "senai134/dev_01/Coordenador/esp32/statusAlarme"
 };
-const int TOTAL_TOPICOS_PUBLICAR = 4; // ← atualizado de 3 para 4
+const int TOTAL_TOPICOS_PUBLICAR = 4; // Deve sempre refletir o tamanho do array acima
 
-// Tópicos que o ESP assina (recebe status dos sensores/atuadores)
+// -------------------------------------------------------
+// Tópicos MQTT de RECEBIMENTO (broker → ESP)
+// O ESP assina esses tópicos para receber comandos.
+// Usa wildcard "#" para escutar TODOS os subtópicos
+// da hierarquia "senai134/dev_01/Coordenador/esp32/"
+// em uma única assinatura.
+// -------------------------------------------------------
 const char* TOPICOS_RECEBER[] = {
-    "senai134/dev_01/Coordenador/esp32/statusLampada",
-    "senai134/dev_01/Coordenador/esp32/statusUmidade",
-    "senai134/dev_01/Coordenador/esp32/statusTemperatura"
+    "senai134/dev_01/Coordenador/esp32/#"  // "#" = todos os subtópicos abaixo desse nível
 };
-const int TOTAL_TOPICOS_RECEBER = 3;
+const int TOTAL_TOPICOS_RECEBER = 1; // Deve sempre refletir o tamanho do array acima
 
-// Integração com AWS IoT (desativada — usando HiveMQ)
-const bool USAR_AWS_IOT = false;
+// -------------------------------------------------------
+// Flags de comportamento
+// -------------------------------------------------------
+const bool USAR_AWS_IOT = false; // false = usa HiveMQ | true = usa AWS IoT Core (não implementado)
 
-// Nível de log inicial (0 = nenhum, 1 = erros, 2 = info completo)
-const int DEBUG_NIVEL_INICIAL = 2;
-
-// Pino que, quando em LOW, habilita debug completo em tempo de execução
-const int PINO_HABILITA_DEBUG_COMPLETO = 4;
+// -------------------------------------------------------
+// Configurações do sistema de debug serial
+// -------------------------------------------------------
+const int DEBUG_NIVEL_INICIAL           = 2; // 0=nenhum | 1=erros | 2=completo
+const int PINO_HABILITA_DEBUG_COMPLETO  = 4; // GPIO4: se LOW no boot, força DEBUG_TUDO

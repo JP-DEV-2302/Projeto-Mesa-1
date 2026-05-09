@@ -4,5 +4,10 @@
 .vscode/launch.json
 .vscode/ipch
 README
-test
-
+src/secrets.cpp
+include/secrets.cpp
+.pio/
+.vscode/
+*.pyc
+.DS_Store
+Thumbs.db
