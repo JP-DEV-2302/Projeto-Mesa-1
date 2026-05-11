@@ -20,31 +20,6 @@
 #include "DebugManager.h"   // Funções de log: debugInfo() e debugErro()
 #include "MqttManager.h"    // Publicação de mensagens via MQTT
 
-<<<<<<< HEAD
-// ---------------- PINOS ----------------
-#define DHTPIN      10      // 🔥 corrigido (mais estável no ESP32-S3)
-#define DHTTYPE     DHT22
-#define BUZZER_PIN  7
-
-// ---------------- LIMITES ----------------
-#define TEMP_MIN 20.0f
-#define TEMP_MAX 30.0f
-#define UMID_MIN 45.0f
-#define UMID_MAX 60.0f
-
-// ---------------- MQTT ----------------
-#define INDICE_TOPICO_TEMPERATURA 2
-#define INDICE_TOPICO_UMIDADE     1
-#define INDICE_TOPICO_ALARME      3
-
-#define MAX_FALHAS_DHT 5
-
-extern int buzzer;
-extern DHT dht;
-extern LiquidCrystal_I2C lcd;
-
-void setupComponentes();
-=======
 // -------------------------------------------------------
 // Pinos dos componentes físicos
 // Altere conforme a ligação real no seu hardware
@@ -103,7 +78,6 @@ void setupComponentes();
 // via MQTT e atualiza o display LCD com os valores atuais.
 // Operação não-bloqueante — deve ser chamada no loop()
 // -------------------------------------------------------
->>>>>>> afcc4b9ba6b269174f08fa5bff08172178979df7
 void verificarTemperaturaEUmidade();
 
 #endif

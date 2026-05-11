@@ -22,7 +22,7 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 #include <Adafruit_NeoPixel.h>
-//#include <LED.h>
+#include <LED.h>
 #include <DHT.h>
 #include <DHT_U.h>
 
@@ -43,6 +43,7 @@ const int QUANTIDADE_LEDS = 1;
 // Controlada pela classe Led (biblioteca LED.h)
 // -------------------------------------------------------
 const int PINO_LAMPADA = 40;
+Led lampada(PINO_LAMPADA);
 
 
 // -------------------------------------------------------
